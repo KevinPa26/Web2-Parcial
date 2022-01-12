@@ -1,0 +1,110 @@
+doctype html
+html(lang='es')
+    head
+        meta(charset='UTF-8')
+        meta(http-equiv="X-UA-Compatible", content="ie=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous")
+        title asd
+    body
+        nav(class="navbar navbar-expand-sm bg-light justify-content-center")
+            ul(class="navbar-nav")
+                li(class="nav-item")
+                    a(class="nav-link" href="modificarPersona") MODIFICAR
+        .container
+            .row
+                if(personas.length > 0)
+                    table(class="table")
+                        thead(class="thead-light")
+                            tr
+                                th DNI
+                                th NOMBRE
+                                th APELLIDO
+                                th EMAIL
+                                th FECHA
+                                th FOTO
+                        tbody
+                            each val in personas
+                                tr
+                                    td #{val.dni}
+                                    td #{val.nombre}
+                                    td #{val.apellido}
+                                    td #{val.mail}
+                                    td #{val.fechaActual}
+                                    td
+                                        img(src=val.foto, alt="" style="width:100px")
+                                    td
+                                        button(type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal" onclick="llenarForm(this);") MODIFICAR
+                else
+                    h1 NO HAY DATOS EN LA BD
+            .row
+                div(class="modal fade" id="myModal" role="dialog")
+                    div(class="modal-dialog")
+                        div(class="modal-content")
+                            div(class="modal-header")
+                                button(type="button" class="close" data-dismiss="modal") &times;
+                                h4(class="modal-title") Modificar
+                            div(class="modal-body")
+                                include form.pug
+        script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js")
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js")
+        script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js")
+        script.
+            window.onload = function(){
+                var fecha = new Date();
+                var mes = fecha.getMonth()+1;
+                var dia = fecha.getDate();
+                var ano = fecha.getFullYear();
+                if(dia<10)
+                    dia='0'+dia;
+                if(mes<10)
+                    mes='0'+mes;
+                document.getElementById('fecha').value=ano+"-"+mes+"-"+dia;
+            }
+            function llenarForm(e){
+                const inputs = document.getElementsByTagName('input');
+                const pa = e.parentNode.parentNode;
+                let myArr = pa.childNodes;
+                console.log(myArr);
+                inputs[0].value = Number(myArr[1].innerHTML);
+                inputs[1].value = myArr[3].innerHTML;
+                inputs[2].value = myArr[5].innerHTML;
+                inputs[3].value = myArr[7].innerHTML;
+                inputs[6].value = Number(myArr[1].innerHTML);
+            }
+            function validar(){
+                let er=0;
+                const regExp = {
+                    num: /^[0-9]{8,10}$/,
+                    letras: /^[a-zA-Z]{4,10}$/
+                };
+                const inputs = document.getElementsByTagName('input');
+                if(!regExp.num.test(inputs[0].value)){
+                    document.getElementById('dni').style.borderColor="red";
+                    er += 1;
+                }else{
+                    document.getElementById('dni').style.borderColor="green";
+                }
+                if(!regExp.letras.test(inputs[1].value)){
+                    document.getElementById('nombre').style.borderColor="red";
+                    er += 1;
+                }else{
+                    document.getElementById('nombre').style.borderColor="green";
+                }
+                if(!regExp.letras.test(inputs[2].value)){
+                    document.getElementById('apellido').style.borderColor="red";
+                    er += 1;
+                }else{
+                    document.getElementById('apellido').style.borderColor="green";
+                }
+                if(inputs[3].value.length == 0){
+                    document.getElementById('email').style.borderColor="red";
+                    er += 1;
+                }else{
+                    document.getElementById('email').style.borderColor="green";
+                }
+                if(er==0){
+                    document.getElementsByTagName("form")[0].submit();
+                }
+            }

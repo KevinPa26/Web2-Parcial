@@ -1,0 +1,23 @@
+form(method="post" action="modificar" enctype="multipart/form-data")
+    .form-group
+        label(for="dni") DNI (min 8, max 10 num):
+        input#dni(type="number" name="dni" class="form-control" readonly=modificar)
+    .form-group
+        label(for="nombre") Nombre (solo letras y un min 4):
+        input#nombre(type="text" name="nombre" class="form-control")
+    .form-group
+        label(for="apellido") Apellido (solo letras y un min 4):
+        input#apellido(type="text" name="apellido" class="form-control")
+    .form-group
+        label(for="email") Email (no debe estar vacio):
+        input#email(type="email" name="email" class="form-control")
+    .form-group
+        label(for="fecha") Fecha actual:
+        input#fecha(type="date" name="fecha" class="form-control" readonly="readonly")
+    .form-group
+        label(for="Foto") Foto (solo png, jpg, jpeg):
+        input#foto(type="file" name="foto" class="form-control" accept="image/x-png,image/jpg,image/jpeg")
+    .form-group
+        input#dnifijo(type="hidden" name="dnifijo" class="form-control" readonly=modificar)
+    br
+    button(type="button" class="btn btn-primary" style="margin-left: 35%;" onclick='validar()') MODIFICAR
